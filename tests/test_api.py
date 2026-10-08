@@ -52,6 +52,11 @@ def test_cannot_mark_incomplete_request_new(client):
 def test_validation_and_not_found(client):
     assert client.post("/requests", json={"text": ""}).status_code == 422
     assert client.patch("/requests/1/fields", json={"quantity": -3}).status_code == 422
+    assert client.patch("/requests/1/fields", json={"item": "x" * 301}).status_code == 422
+    # Python's JSON parser accepts the non-standard literal Infinity; it must not get through.
+    inf = client.patch("/requests/1/fields", content='{"quantity": Infinity}',
+                       headers={"Content-Type": "application/json"})
+    assert inf.status_code == 422
     assert client.get("/requests/999").status_code == 404
     assert client.get("/requests?status=bogus").status_code == 422
 

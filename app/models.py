@@ -25,11 +25,11 @@ class Extracted(BaseModel):
     and flagged, never guessed.
     """
 
-    item: str | None = None
-    quantity: float | None = Field(default=None, gt=0)
-    unit: str | None = None
+    item: str | None = Field(default=None, max_length=300)
+    quantity: float | None = Field(default=None, gt=0, allow_inf_nan=False)
+    unit: str | None = Field(default=None, max_length=20)
     deadline: date | None = None
-    department: str | None = None
+    department: str | None = Field(default=None, max_length=100)
 
     def missing_fields(self) -> list[str]:
         return [f for f in REQUIRED_FIELDS if getattr(self, f) in (None, "")]

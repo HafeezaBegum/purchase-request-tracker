@@ -189,6 +189,28 @@ I built this with **Claude Code** as a pair programmer.
 
 ---
 
+## Security notes
+
+- **No secrets in the repo.** The API key is read from an environment variable,
+  and `.env` files and the local database are excluded by `.gitignore`.
+- **SQL injection:** every query is parameterized, with no SQL built from strings.
+- **XSS:** user-supplied text is HTML-escaped before the dashboard displays it.
+- **Input limits:** request text, item, unit, and department have maximum
+  lengths, and quantity must be a finite positive number.
+- **Error responses don't echo input.** A validation error says which field is
+  wrong but doesn't repeat the submitted value.
+- **Logs contain no request text.** Only IDs, status changes, and which fields
+  are missing.
+- **Prompt injection:** request text is sent to Claude as data, and the reply
+  must match a strict schema of five fields. The worst a malicious request can
+  do is fill its own fields with wrong values, which the workflow still
+  routes for human approval.
+- **Data leaving the building:** with an API key set, request text is sent to
+  Anthropic's API. Without a key, nothing leaves the machine.
+- **Not production-ready as is:** there is no login. The server only listens on
+  `localhost` by default and shouldn't be exposed to a network without adding
+  authentication.
+
 ## Limitations and next steps
 
 - **Multi-item requests** ("200 m of 12 AWG and 50 m of 10 AWG") are treated as one item.

@@ -6,8 +6,9 @@ import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import HTMLResponse, JSONResponse
 
 from . import db
 from .extract import clarification_for, extract
@@ -34,6 +35,15 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title="Purchase Request Tracker", lifespan=lifespan)
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_error(_: Request, exc: RequestValidationError):
+    # FastAPI's default 422 echoes the submitted values back. That can crash on
+    # values JSON can't encode (e.g. Infinity) and reflects user data, so return
+    # only where the problem is and what it is.
+    errors = [{"loc": e["loc"], "msg": e["msg"]} for e in exc.errors()]
+    return JSONResponse(status_code=422, content={"detail": errors})
 
 
 def _to_out(row) -> RequestOut:
