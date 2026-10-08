@@ -44,7 +44,7 @@ A few choices I made on purpose:
 
 ## Accuracy
 
-`eval/samples.jsonl` has 24 sample requests I labeled by hand, ranging from clean
+`eval/samples.jsonl` has 24 labeled sample requests, ranging from clean
 ones to messy emails to vague ones.
 
 With the rules extractor, 15 of 24 have every field correct, and when a detail
