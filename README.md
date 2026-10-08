@@ -1,5 +1,7 @@
 # Purchase Request Tracker
 
+[![tests](https://github.com/HafeezaBegum/purchase-request-tracker/actions/workflows/tests.yml/badge.svg)](https://github.com/HafeezaBegum/purchase-request-tracker/actions/workflows/tests.yml)
+
 A small internal tool that turns messy production and purchasing requests into
 structured, trackable work.
 
