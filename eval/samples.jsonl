@@ -1,0 +1,24 @@
+{"text": "Production needs 200 meters of copper wire by Friday.", "expected": {"item": "copper wire", "quantity": 200, "unit": "m", "deadline": "2026-10-09", "department": "Production"}}
+{"text": "We need 200 meters of copper wire by Friday", "expected": {"item": "copper wire", "quantity": 200, "unit": "m", "deadline": "2026-10-09", "department": null}}
+{"text": "Maintenance: 4 boxes of nitrile gloves, size L, needed tomorrow", "expected": {"item": "nitrile gloves", "quantity": 4, "unit": "box", "deadline": "2026-10-09", "department": "Maintenance"}}
+{"text": "Hi team, Quality is running low on calibration standards. Can we get 3 pcs of 10mm gauge blocks by Oct 15? Thanks, Dana", "expected": {"item": "gauge blocks", "quantity": 3, "unit": "pcs", "deadline": "2026-10-15", "department": "Quality"}}
+{"text": "need more wire asap", "expected": {"item": null, "quantity": null, "unit": null, "deadline": null, "department": null}}
+{"text": "Purchasing - please order 1,500 lbs of copper rod for production, due 10/20", "expected": {"item": "copper rod", "quantity": 1500, "unit": "lb", "deadline": "2026-10-20", "department": "Purchasing"}}
+{"text": "Shipping needs 12 reels of empty wooden spools by Monday", "expected": {"item": "wooden spools", "quantity": 12, "unit": "reel", "deadline": "2026-10-12", "department": "Shipping"}}
+{"text": "650 ft of 12 AWG THHN for the maintenance shop, end of next week", "expected": {"item": "12 AWG THHN", "quantity": 650, "unit": "ft", "deadline": null, "department": "Maintenance"}}
+{"text": "Engineering wants samples of tinned copper braid. Not sure how much yet.", "expected": {"item": "tinned copper braid", "quantity": null, "unit": null, "deadline": null, "department": "Engineering"}}
+{"text": "Can production get 50 kg of drawing lubricant before next Friday?", "expected": {"item": "drawing lubricant", "quantity": 50, "unit": "kg", "deadline": "2026-10-16", "department": "Production"}}
+{"text": "Safety needs 20 units of hearing protection in 2 weeks", "expected": {"item": "hearing protection", "quantity": 20, "unit": "pcs", "deadline": "2026-10-22", "department": "Safety"}}
+{"text": "Order 5 spools 14 AWG bare copper, needed 2026-11-02, finance approved", "expected": {"item": "14 AWG bare copper", "quantity": 5, "unit": "spool", "deadline": "2026-11-02", "department": null}}
+{"text": "We're out of die lubricant on line 3!! need it today", "expected": {"item": "die lubricant", "quantity": null, "unit": null, "deadline": "2026-10-08", "department": null}}
+{"text": "Receiving: 2 pallets of shrink wrap by Wednesday", "expected": {"item": "shrink wrap", "quantity": 2, "unit": null, "deadline": "2026-10-14", "department": "Receiving"}}
+{"text": "IT needs 6 replacement barcode scanners, no rush", "expected": {"item": "barcode scanners", "quantity": 6, "unit": "pcs", "deadline": null, "department": "IT"}}
+{"text": "For HR: 40 pcs of safety orientation binders by 10/30", "expected": {"item": "safety orientation binders", "quantity": 40, "unit": "pcs", "deadline": "2026-10-30", "department": "HR"}}
+{"text": "production line 2 - 3000m 10 AWG stranded copper, Nov 5", "expected": {"item": "10 AWG stranded copper", "quantity": 3000, "unit": "m", "deadline": "2026-11-05", "department": "Production"}}
+{"text": "Please get some cutting blades for the maintenance team by tomorrow", "expected": {"item": "cutting blades", "quantity": null, "unit": null, "deadline": "2026-10-09", "department": "Maintenance"}}
+{"text": "Quality lab: 1 box of micrometer batteries", "expected": {"item": "micrometer batteries", "quantity": 1, "unit": "box", "deadline": null, "department": "Quality"}}
+{"text": "Need 250 feet of 6 AWG ground wire for engineering prototype by Thursday", "expected": {"item": "6 AWG ground wire", "quantity": 250, "unit": "ft", "deadline": "2026-10-15", "department": "Engineering"}}
+{"text": "same as last month's order please", "expected": {"item": null, "quantity": null, "unit": null, "deadline": null, "department": null}}
+{"text": "Purchasing, 10 reels of 18 AWG magnet wire. Customer PO due 10/12 so we need it by 10/9.", "expected": {"item": "18 AWG magnet wire", "quantity": 10, "unit": "reel", "deadline": "2026-10-09", "department": "Purchasing"}}
+{"text": "shipping wants 300 lb of strapping", "expected": {"item": "strapping", "quantity": 300, "unit": "lb", "deadline": null, "department": "Shipping"}}
+{"text": "Production needs 2 tons of copper cathode by Oct 30", "expected": {"item": "copper cathode", "quantity": 2, "unit": null, "deadline": "2026-10-30", "department": "Production"}}

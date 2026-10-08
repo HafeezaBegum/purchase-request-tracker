@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ops Requests</title>
+<style>
+  :root { --bg:#f7f7f5; --card:#fff; --ink:#1d1d1b; --muted:#6b6b66; --line:#e3e2dc;
+          --accent:#b4541a; --warn:#a15c00; --warn-bg:#fff4e0; --ok:#2e6b3a; --ok-bg:#e8f3ea; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.45 system-ui, sans-serif; background:var(--bg); color:var(--ink); }
+  main { max-width:1000px; margin:0 auto; padding:24px 16px; }
+  h1 { font-size:22px; margin:0 0 4px; } p.sub { color:var(--muted); margin:0 0 20px; }
+  form { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+  textarea { flex:1 1 400px; min-height:60px; padding:10px; border:1px solid var(--line); border-radius:6px; font:inherit; }
+  button { padding:8px 14px; border:0; border-radius:6px; background:var(--accent); color:#fff; font:inherit; cursor:pointer; }
+  button.ghost { background:transparent; color:var(--accent); border:1px solid var(--line); padding:4px 10px; }
+  .filters { display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap; }
+  .filters button { background:var(--card); color:var(--ink); border:1px solid var(--line); padding:4px 10px; }
+  .filters button.on { background:var(--ink); color:#fff; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:14px; margin-bottom:10px; }
+  .row { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .text { font-style:italic; color:var(--muted); margin:4px 0 10px; }
+  dl { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:6px 16px; margin:0; }
+  dt { font-size:12px; color:var(--muted); } dd { margin:0; font-weight:600; }
+  dd.missing { color:var(--warn); font-weight:400; }
+  .pill { font-size:12px; padding:2px 8px; border-radius:99px; background:var(--line); white-space:nowrap; }
+  .pill.needs_info { background:var(--warn-bg); color:var(--warn); } .pill.new { background:var(--ok-bg); color:var(--ok); }
+  pre { background:var(--warn-bg); padding:10px; border-radius:6px; white-space:pre-wrap; margin:10px 0 0; font:13px/1.4 inherit; }
+  .actions { margin-top:10px; display:flex; gap:6px; flex-wrap:wrap; }
+  .err { color:#b00020; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Operations Requests</h1>
+  <p class="sub">Paste a production or purchasing request. Missing details are flagged, not guessed.</p>
+  <form id="f">
+    <textarea id="t" placeholder="e.g. Production needs 200 meters of 12 AWG bare copper wire by Friday" required></textarea>
+    <button>Submit</button>
+  </form>
+  <div id="err" class="err"></div>
+  <div class="filters" id="filters"></div>
+  <div id="list"></div>
+</main>
+<script>
+const STATUSES = ["all","needs_info","new","approved","ordered","done","rejected"];
+const NEXT = { needs_info:["rejected"], new:["approved","rejected"], approved:["ordered","rejected"], ordered:["done"], done:[], rejected:[] };
+const FIELDS = ["item","quantity","unit","deadline","department"];
+let filter = "all";
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+async function api(path, opts={}) {
+  const r = await fetch(path, { headers:{"Content-Type":"application/json"}, ...opts });
+  if (!r.ok) { const b = await r.json().catch(()=>({})); throw new Error(typeof b.detail === "string" ? b.detail : r.statusText); }
+  return r.json();
+}
+
+function renderFilters() {
+  $("filters").innerHTML = STATUSES.map(s => `<button class="${s===filter?"on":""}" data-s="${s}">${s.replace("_"," ")}</button>`).join("");
+}
+
+async function load() {
+  renderFilters();
+  const rows = await api("/requests" + (filter==="all" ? "" : "?status="+filter));
+  $("list").innerHTML = rows.length ? rows.map(r => `
+    <div class="card">
+      <div class="row"><strong>#${r.id}</strong><span><span class="pill">${r.method}</span> <span class="pill ${r.status}">${r.status.replace("_"," ")}</span></span></div>
+      <div class="text">"${esc(r.text)}"</div>
+      <dl>${FIELDS.map(f => `<div><dt>${f}</dt>${r.extracted[f]==null ? `<dd class="missing">missing</dd>` : `<dd>${esc(r.extracted[f])}</dd>`}</div>`).join("")}</dl>
+      ${r.clarification ? `<pre>${esc(r.clarification)}</pre>` : ""}
+      <div class="actions">
+        ${r.missing.length && r.status==="needs_info" ? `<button class="ghost" data-fill="${r.id}" data-missing="${r.missing.join(",")}">Fill in missing</button>` : ""}
+        ${NEXT[r.status].map(s => `<button class="ghost" data-id="${r.id}" data-to="${s}">→ ${s}</button>`).join("")}
+      </div>
+    </div>`).join("") : `<p class="sub">No requests.</p>`;
+}
+
+$("f").onsubmit = async e => {
+  e.preventDefault(); $("err").textContent = "";
+  const btn = e.target.querySelector("button");
+  btn.disabled = $("t").disabled = true;  // block double-submits while the request is in flight
+  try { await api("/requests", { method:"POST", body: JSON.stringify({ text: $("t").value }) }); $("t").value = ""; await load(); }
+  catch (x) { $("err").textContent = x.message; }
+  finally { btn.disabled = $("t").disabled = false; }
+};
+
+document.addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  $("err").textContent = "";
+  try {
+    if (b.dataset.s) { filter = b.dataset.s; await load(); }
+    else if (b.dataset.to) { await api(`/requests/${b.dataset.id}/status`, { method:"PATCH", body: JSON.stringify({ status: b.dataset.to }) }); await load(); }
+    else if (b.dataset.fill) {
+      const body = {};
+      for (const f of b.dataset.missing.split(",")) {
+        const v = prompt(`${f}${f==="deadline" ? " (YYYY-MM-DD)" : ""}:`); if (v === null) return;
+        if (v.trim()) body[f] = f === "quantity" ? Number(v) : v.trim();
+      }
+      await api(`/requests/${b.dataset.fill}/fields`, { method:"PATCH", body: JSON.stringify(body) }); await load();
+    }
+  } catch (x) { $("err").textContent = x.message; }
+});
+
+load().catch(x => $("err").textContent = x.message);
+</script>
+</body>
+</html>
