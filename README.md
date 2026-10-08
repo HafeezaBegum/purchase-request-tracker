@@ -6,6 +6,7 @@ structured, trackable work.
 At a manufacturing plant, requests usually arrive as quick messages:
 
 > "Production needs 200 meters of copper wire by Friday."
+
 > "need more wire asap"
 
 Someone has to work out what's being asked, chase whatever is missing, and
