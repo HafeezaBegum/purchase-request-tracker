@@ -1,4 +1,4 @@
-# Manufacturing Operations Assistant
+# Purchase Request Tracker
 
 A small internal tool that turns messy production and purchasing requests into
 structured, trackable work.

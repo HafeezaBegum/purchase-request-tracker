@@ -33,7 +33,7 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="Manufacturing Operations Assistant", lifespan=lifespan)
+app = FastAPI(title="Purchase Request Tracker", lifespan=lifespan)
 
 
 def _to_out(row) -> RequestOut:
