@@ -1,7 +1,5 @@
 # Purchase Request Tracker
 
-[![tests](https://github.com/HafeezaBegum/purchase-request-tracker/actions/workflows/tests.yml/badge.svg)](https://github.com/HafeezaBegum/purchase-request-tracker/actions/workflows/tests.yml)
-
 Purchase requests at a plant often show up as one-line messages like
 "Production needs 200 meters of copper wire by Friday", or worse, "need more wire asap".
 
@@ -56,13 +54,6 @@ where Claude should do better. I haven't measured the Claude version yet.
 
 Running the eval also caught a bug: "need **it** today" was being tagged as the
 **IT** department. It now only matches uppercase "IT", and a test covers it.
-
-## How I used AI
-
-I used Claude Code to build this. I picked the problem and what the app needed
-to do, and Claude Code wrote most of the first version. After that I tested it
-by hand, added the labeled eval, fixed what it turned up, and did a security pass
-(which caught a crash when the quantity was "Infinity").
 
 ## Limitations
 
